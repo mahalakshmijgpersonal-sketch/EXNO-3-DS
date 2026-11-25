@@ -64,6 +64,7 @@ print("\nMissing values after cleaning:")
 print(data.isnull().sum())
 ```
 <img width="592" height="762" alt="image" src="https://github.com/user-attachments/assets/2dd211f8-9aae-47cf-a7e8-b039223283bb" />
+
 ```
 le = LabelEncoder()
 
@@ -77,25 +78,32 @@ data.head()
 ```
 # Fill missing fare values
 data['fare'] = data['fare'].fillna(data['fare'].mean())
-
+```
+```
 # Keep positive fare values
 fare_data = data[data['fare'] > 0].copy()
-
+```
+```
 # Log Transformation
 fare_data['log_fare'] = np.log(fare_data['fare'])
-
+```
+```
 # Reciprocal Transformation
 fare_data['reciprocal_fare'] = 1 / fare_data['fare']
-
+```
+```
 # Square Root Transformation
 fare_data['sqrt_fare'] = np.sqrt(fare_data['fare'])
-
+```
+```
 # Square Transformation
 fare_data['square_fare'] = np.square(fare_data['fare'])
-
+```
+```
 # Box-Cox Transformation
 fare_data['boxcox_fare'], _ = stats.boxcox(fare_data['fare'])
-
+```
+```
 # Yeo-Johnson Transformation
 pt = PowerTransformer(method='yeo-johnson')
 fare_data['yeojohnson_fare'] = pt.fit_transform(fare_data[['fare']])
