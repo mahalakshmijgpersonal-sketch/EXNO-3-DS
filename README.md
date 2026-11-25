@@ -31,8 +31,96 @@ We use this categorical data encoding technique when the features are nominal(do
 • Yeojohnson method
 
 # CODING AND OUTPUT:
-       # INCLUDE YOUR CODING AND OUTPUT SCREENSHOTS HERE
+```
+import pandas as pd
+import numpy as np
+import seaborn as sns
+
+from sklearn.preprocessing import LabelEncoder, StandardScaler, PowerTransformer
+from scipy import stats
+
+print("Libraries imported successfully")
+
+data = pd.read_csv("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/titanic.csv")
+
+print("Dataset loaded successfully")
+data.head()
+```
+<img width="1092" height="270" alt="image" src="https://github.com/user-attachments/assets/fb3c0a1e-cbd7-4e2f-8b26-64e7e5b9165b" />
+
+```
+print("Missing values before cleaning:")
+print(data.isnull().sum())
+
+# Fill missing numerical values
+for col in data.select_dtypes(include=np.number).columns:
+    data[col] = data[col].fillna(data[col].mean())
+
+# Fill missing categorical values
+for col in data.select_dtypes(include='object').columns:
+    data[col] = data[col].fillna(data[col].mode()[0])
+
+print("\nMissing values after cleaning:")
+print(data.isnull().sum())
+```
+<img width="592" height="762" alt="image" src="https://github.com/user-attachments/assets/2dd211f8-9aae-47cf-a7e8-b039223283bb" />
+```
+le = LabelEncoder()
+
+for col in data.select_dtypes(include='object').columns:
+    data[col] = le.fit_transform(data[col].astype(str))
+
+print("Feature Encoding Completed")
+data.head()
+```
+<img width="1100" height="272" alt="image" src="https://github.com/user-attachments/assets/5d9eece4-ec4c-4b96-8262-fe3f6cd1414a" />
+```
+# Fill missing fare values
+data['fare'] = data['fare'].fillna(data['fare'].mean())
+
+# Keep positive fare values
+fare_data = data[data['fare'] > 0].copy()
+
+# Log Transformation
+fare_data['log_fare'] = np.log(fare_data['fare'])
+
+# Reciprocal Transformation
+fare_data['reciprocal_fare'] = 1 / fare_data['fare']
+
+# Square Root Transformation
+fare_data['sqrt_fare'] = np.sqrt(fare_data['fare'])
+
+# Square Transformation
+fare_data['square_fare'] = np.square(fare_data['fare'])
+
+# Box-Cox Transformation
+fare_data['boxcox_fare'], _ = stats.boxcox(fare_data['fare'])
+
+# Yeo-Johnson Transformation
+pt = PowerTransformer(method='yeo-johnson')
+fare_data['yeojohnson_fare'] = pt.fit_transform(fare_data[['fare']])
+
+print("Feature Transformation Completed")
+fare_data.head()
+```
+<img width="1282" height="300" alt="image" src="https://github.com/user-attachments/assets/ef9ae2c5-247c-4e09-b700-a727dfd90954" />
+```
+fare_data.to_csv('feature_transformed_data.csv', index=False)
+print("File saved successfully!")
+```
+<img width="407" height="37" alt="image" src="https://github.com/user-attachments/assets/261e44c4-340d-43cd-95d5-e6e601b89da8" />
+```
+print("Final Transformed Dataset:")
+display(fare_data.head())
+
+print("\nDataset Shape:", fare_data.shape)
+print("\nFinal Columns:")
+print(fare_data.columns)
+```
+<img width="1328" height="528" alt="image" src="https://github.com/user-attachments/assets/da80fba7-802c-465f-b173-65746437020b" />
+
+
 # RESULT:
-       # INCLUDE YOUR RESULT HERE
+      Thus the program to implement the linear regression using gradient descent is written and verified using Python programming.
 
        
